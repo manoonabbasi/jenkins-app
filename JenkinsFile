@@ -1,0 +1,52 @@
+pipeline {
+    agent any // Run the pipeline on any available agent
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // Define the Git repository URL and branch
+                    def gitUrl = 'https://github.com/manoonabbasi/jenkins-app.git'
+                    def gitBranch = 'main' // Change this to your branch name
+
+                    // Check out the code
+                    checkout([$class: 'GitSCM', branches: [[name: gitBranch]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: gitUrl]]])
+                }
+            }
+        }
+
+        stage('Build and Test') {
+            steps {
+                // Install Python and any necessary dependencies
+                //sh 'pip install -r requirements.txt'
+
+                // Run unit tests (placeholder, replace with actual test command)
+                sh 'python3 build-test.py'
+            }
+        }
+
+        stage('Deployment') {
+            when {
+                expression { currentBuild.resultIsBetterOrEqualTo('SUCCESS') }
+            }
+            steps {
+                // Deploy the application to a staging server (placeholder, replace with your deployment script)
+                sh 'python3 renamer.py'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI/CD pipeline completed successfully!'
+        }
+        failure {
+            echo 'CI/CD pipeline failed. Check the logs for details.'
+        }
+    }
+}
+
+
+// This is just a simple example of python code and edge-test for that.
+// it could go complex. This is kinda ineresting.
+// Example image is also added to show the PIPE in Jenkins...
