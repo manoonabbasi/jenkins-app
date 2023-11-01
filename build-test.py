@@ -5,7 +5,7 @@ import unittest
 class UnitTestExample(unittest.TestCase):
     def test_wrong_input(self):
         name = "Ahmed, Abbasi"
-        expected = "0000000 Ahmed"
+        expected = "Abbasi Ahmed"
         self.assertEqual(renamer(name), expected)
         
     def test_empty(self): # that's an edge case as it produces output which is unexpected.
