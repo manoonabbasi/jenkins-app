@@ -1,0 +1,33 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - uvdesk-db-with-api:/var/lib/mysql  # Persistent data volume for MySQL
+    restart: always
+    environment:
+      MYSQL_DATABASE: uvdesk
+      MYSQL_ROOT_PASSWORD: abbasi94
+      MYSQL_USER: uvdesk
+      MYSQL_PASSWORD: abbasi94
+
+  uvdesk:
+    image: linuxpsych0/uvdesk-api:latest
+    depends_on:
+      - db
+    tty: true
+    volumes:
+      - uvdesk-base-with-api:/var/www/html  # Persistent volume for application data
+    restart: always
+    environment:
+      MYSQL_USER: uvdesk
+      MYSQL_PASSWORD: abbasi94
+      MYSQL_ROOT_PASSWORD: abbasi94
+      MYSQL_DATABASE: uvdesk
+      
+    ports:
+      - 8083:80
+
+volumes:
+  uvdesk-db-with-api:  
+  uvdesk-base-with-api:  
